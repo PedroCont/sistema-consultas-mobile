@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 import { Especialidade } from "./src/types/especialidade";
 import { Paciente } from "./src/types/paciente";
 import { Medico } from "./src/interfaces/medico";
 import { Consulta } from "./src/interfaces/consulta";
+import ConsultaCard from "./src/components/ConsultaCard";
 
 export default function App() {
   const cardiologia: Especialidade = {
@@ -43,20 +44,22 @@ export default function App() {
     });
   }
 
+  function cancelarConsulta() {
+    setConsulta({
+      ...consulta,
+      status: "cancelada",
+    });
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Sistema de Consultas</Text>
 
-      <View style={styles.card}>
-        <Text>Paciente: {consulta.paciente.nome}</Text>
-        <Text>Médico: {consulta.medico.nome}</Text>
-        <Text>Data: {consulta.data.toLocaleDateString()}</Text>
-        <Text>Status: {consulta.status}</Text>
-
-        {consulta.status === "agendada" && (
-          <Button title="Confirmar Consulta" onPress={confirmarConsulta} />
-        )}
-      </View>
+      <ConsultaCard
+        consulta={consulta}
+        onConfirmar={confirmarConsulta}
+        onCancelar={cancelarConsulta}
+      />
     </View>
   );
 }
@@ -64,7 +67,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f4f6f8",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -72,11 +75,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-  },
-  card: {
-    width: "80%",
-    padding: 20,
-    borderWidth: 1,
-    borderRadius: 8,
   },
 });
