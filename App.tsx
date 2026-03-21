@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import { Especialidade } from "./src/types/especialidade";
 import { Paciente } from "./src/types/paciente";
 import { Medico } from "./src/interfaces/medico";
 import { Consulta } from "./src/interfaces/consulta";
-import ConsultaCard from "./src/components/ConsultaCard";
+
+import { ConsultaCard } from "./src/components";
 
 export default function App() {
   const cardiologia: Especialidade = {
     id: 1,
     nome: "Cardiologia",
+    descricao: "Cuidados com o coração",
   };
 
   const medico1: Medico = {
@@ -26,15 +29,17 @@ export default function App() {
     nome: "Carlos Andrade",
     cpf: "123.456.789-00",
     email: "carlos@email.com",
+    telefone: "(11) 98765-4321",
   };
 
   const [consulta, setConsulta] = useState<Consulta>({
     id: 1,
     medico: medico1,
     paciente: paciente1,
-    data: new Date(),
+    data: new Date(2026, 2, 10),
     valor: 350,
     status: "agendada",
+    observacoes: "Consulta de rotina",
   });
 
   function confirmarConsulta() {
@@ -53,13 +58,22 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Sistema de Consultas</Text>
+      <StatusBar style="light" />
 
-      <ConsultaCard
-        consulta={consulta}
-        onConfirmar={confirmarConsulta}
-        onCancelar={cancelarConsulta}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.header}>
+          <Text style={styles.titulo}>Sistema de Consultas</Text>
+          <Text style={styles.subtitulo}>
+            Consulta #{consulta.id}
+          </Text>
+        </View>
+
+        <ConsultaCard
+          consulta={consulta}
+          onConfirmar={confirmarConsulta}
+          onCancelar={cancelarConsulta}
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -67,13 +81,25 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f6f8",
+    backgroundColor: "#79059C",
+  },
+  scrollContent: {
+    padding: 20,
+    paddingTop: 60,
+  },
+  header: {
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 24,
   },
   titulo: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 20,
+    color: "#fff",
+    marginBottom: 8,
+  },
+  subtitulo: {
+    fontSize: 18,
+    color: "#fff",
+    opacity: 0.9,
   },
 });
